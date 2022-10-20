@@ -103,9 +103,9 @@ class StoryVideoState extends State<StoryVideo> {
       if (widget.videoLoader.state == LoadState.success) {
         this.playerController =
             VideoPlayerController.file(widget.videoLoader.videoFile!);
-        _createChewieController();
 
         playerController!.initialize().then((v) {
+          _createChewieController();
           setState(() {});
           widget.storyController!.play();
         });
