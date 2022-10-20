@@ -23,6 +23,7 @@ class VideoLoader {
   void loadVideo(VoidCallback onComplete) {
     if (this.videoFile != null) {
       this.state = LoadState.success;
+      print("loading state: ${this.state} in video loader");
       onComplete();
     }
 
@@ -32,8 +33,11 @@ class VideoLoader {
     fileStream.listen((fileResponse) {
       if (fileResponse is FileInfo) {
         if (this.videoFile == null) {
+          print("inside file stream listener");
           this.state = LoadState.success;
+          print("inside file stream listener this.state: ${this.state}");
           this.videoFile = fileResponse.file;
+          print("inside file stream listener this.videoFile: ${this.videoFile?.path ?? "path was null"}");
           onComplete();
         }
       }
@@ -78,9 +82,11 @@ class StoryVideoState extends State<StoryVideo> {
 
 
   void _createChewieController() {
+    print("in create chewie controller");
     _chewieController = ChewieController(
       videoPlayerController: playerController!,
       autoPlay: true,
+      autoInitialize: false,
       looping: false,
       showOptions: false,
       progressIndicatorDelay:
