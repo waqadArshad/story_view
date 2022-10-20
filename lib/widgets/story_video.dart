@@ -48,8 +48,9 @@ class VideoLoader {
 class StoryVideo extends StatefulWidget {
   final StoryController? storyController;
   final VideoLoader videoLoader;
+  final String myVideoUrl;
 
-  StoryVideo(this.videoLoader, {this.storyController, Key? key})
+  StoryVideo(this.videoLoader, {this.storyController, this.myVideoUrl = "",  Key? key})
       : super(key: key ?? UniqueKey());
 
   static StoryVideo url(String url,
@@ -59,6 +60,7 @@ class StoryVideo extends StatefulWidget {
     return StoryVideo(
       VideoLoader(url, requestHeaders: requestHeaders),
       storyController: controller,
+      myVideoUrl: url,
       key: key,
     );
   }
@@ -107,8 +109,9 @@ class StoryVideoState extends State<StoryVideo> {
 
     widget.videoLoader.loadVideo(() {
       if (widget.videoLoader.state == LoadState.success) {
+        print("myVideoUrl: ${widget.myVideoUrl}");
         this.playerController =
-            VideoPlayerController.file(widget.videoLoader.videoFile!);
+            VideoPlayerController.network(widget.myVideoUrl);
 
         playerController!.initialize().then((v) {
           _createChewieController();
