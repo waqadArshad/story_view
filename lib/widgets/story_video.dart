@@ -94,7 +94,7 @@ class StoryVideoState extends State<StoryVideo> {
       progressIndicatorDelay:
       bufferDelay != null ? Duration(milliseconds: bufferDelay!) : null,
       aspectRatio: playerController!.value.aspectRatio,
-      fullScreenByDefault: true,
+      fullScreenByDefault: false,
       allowPlaybackSpeedChanging: false,
       showControls: false,
       hideControlsTimer: const Duration(seconds: 1),
