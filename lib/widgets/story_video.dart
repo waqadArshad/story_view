@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:video_player/video_player.dart';
@@ -70,6 +71,27 @@ class StoryVideoState extends State<StoryVideo> {
   StreamSubscription? _streamSubscription;
 
   VideoPlayerController? playerController;
+  ChewieController? _chewieController;
+
+  int? bufferDelay;
+
+
+
+  void _createChewieController() {
+    _chewieController = ChewieController(
+      videoPlayerController: playerController!,
+      autoPlay: true,
+      looping: false,
+      showOptions: false,
+      progressIndicatorDelay:
+      bufferDelay != null ? Duration(milliseconds: bufferDelay!) : null,
+      aspectRatio: playerController!.value.aspectRatio,
+      fullScreenByDefault: true,
+      allowPlaybackSpeedChanging: false,
+      showControls: false,
+      hideControlsTimer: const Duration(seconds: 1),
+    );
+  }
 
   @override
   void initState() {
@@ -81,6 +103,7 @@ class StoryVideoState extends State<StoryVideo> {
       if (widget.videoLoader.state == LoadState.success) {
         this.playerController =
             VideoPlayerController.file(widget.videoLoader.videoFile!);
+        _createChewieController();
 
         playerController!.initialize().then((v) {
           setState(() {});
@@ -109,7 +132,10 @@ class StoryVideoState extends State<StoryVideo> {
       return Center(
         child: AspectRatio(
           aspectRatio: playerController!.value.aspectRatio,
-          child: VideoPlayer(playerController!),
+          child: Chewie(
+            controller: _chewieController!,
+          ),
+          // VideoPlayer(playerController!),
         ),
       );
     }
@@ -148,6 +174,7 @@ class StoryVideoState extends State<StoryVideo> {
   void dispose() {
     playerController?.dispose();
     _streamSubscription?.cancel();
+    if (_chewieController != null) _chewieController?.dispose();
     super.dispose();
   }
 }
