@@ -85,7 +85,7 @@ class StoryImage extends StatefulWidget {
     String url, {
     StoryController? controller,
     Map<String, dynamic>? requestHeaders,
-    BoxFit fit = BoxFit.fitWidth,
+    BoxFit fit = BoxFit.contain,
     Key? key,
   }) {
     return StoryImage(
